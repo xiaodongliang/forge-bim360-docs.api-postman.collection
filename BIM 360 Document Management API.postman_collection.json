@@ -1,0 +1,1423 @@
+{
+	"info": {
+		"_postman_id": "38f98ad1-4882-4485-a617-d4b9e553c95b",
+		"name": "BIM 360 Document Management API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Custom Attributes",
+			"item": [
+				{
+					"name": "01-GET one hub",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Get hub collection, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var hub_name = pm.environment.get(\"hub_name\") ",
+									"",
+									"pm.test(\"find matches hub by id: \" + hub_name, function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.data.find(d=>d.attributes.name == hub_name)",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"    ",
+									"    if(find){",
+									"        pm.environment.set(\"hub_id_with_b\", find.id);",
+									"        pm.environment.set(\"hub_id_without_b\", find.id.split(\"b.\").join(\"\"));",
+									"    }else{",
+									"        ",
+									"    }",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"id": "8322527c-84dc-4e29-9e32-4e1da0537bff"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/project/v1/hubs",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"project",
+								"v1",
+								"hubs"
+							]
+						},
+						"description": "GET all hubs of your account, and get one hub. Please provide the hub name (hub_name) in environment variables"
+					},
+					"response": []
+				},
+				{
+					"name": "02-GET one project id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c4706e03-c947-486d-9236-e78575748910",
+								"exec": [
+									"pm.test(\"Get project collection, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var project_name = pm.environment.get(\"project_name\") ",
+									"pm.test(\"find matches project by name: \" + project_name, function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.data.find(d=>d.attributes.name == project_name)",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"    ",
+									"    if(find){",
+									"        pm.environment.set(\"project_id_with_b\", find.id);",
+									"        pm.environment.set(\"project_id_without_b\", find.id.split(\"b.\").join(\"\"));",
+									"        pm.environment.set(\"root_folder_id\", find.relationships.rootFolder.data.id);",
+									"        ",
+									"    }else{",
+									"        ",
+									"    }",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/project/v1/hubs/{{hub_id_with_b}}/projects",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"project",
+								"v1",
+								"hubs",
+								"{{hub_id_with_b}}",
+								"projects"
+							]
+						},
+						"description": "GET all projects of one hub, and get one project Please provide the hub name (project_name) in environment variables"
+					},
+					"response": []
+				},
+				{
+					"name": "03-GET [Project Files] folder id - you can also manually input one_folder_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c6071782-0023-44ff-bfb0-99314e9cd812",
+								"exec": [
+									"pm.test(\"Get project top folder, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"find [Project Files] folder id: \", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.data.find(d=>d.attributes.name == \"Project Files\" )",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"    ",
+									"    if(find){",
+									"        pm.environment.set(\"one_folder_id\", find.id);",
+									"    }else{",
+									"        ",
+									"    }",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/project/v1/hubs/{{hub_id_with_b}}/projects/{{project_id_with_b}}/topFolders",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"project",
+								"v1",
+								"hubs",
+								"{{hub_id_with_b}}",
+								"projects",
+								"{{project_id_with_b}}",
+								"topFolders"
+							],
+							"query": [
+								{
+									"key": "filter[attributes.name]",
+									"value": "{{one_folder_name}}",
+									"disabled": true
+								}
+							]
+						},
+						"description": "GET all projects of one hub, and get one project Please provide the hub name (project_name) in environment variables"
+					},
+					"response": []
+				},
+				{
+					"name": "04-GET some files urn",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9406403e-749e-4019-a12c-ab231e791882",
+								"exec": [
+									"pm.test(\"Get folder content of [Project Files], Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"find some urns: \", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.data",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"    ",
+									"    if(find){",
+									"       ",
+									"        //get version id",
+									"        var demo_urn_0 = find[0].relationships.tip.data.id",
+									"        var demo_urn_1 = find[1].relationships.tip.data.id",
+									"        var demo_urn_2 = find[2].relationships.tip.data.id",
+									"",
+									"        pm.environment.set(\"demo_urn_0\", demo_urn_0);",
+									"        pm.environment.set(\"demo_urn_1\", demo_urn_1);",
+									"        pm.environment.set(\"demo_urn_2\", demo_urn_2);",
+									"",
+									"         //url encoded",
+									"        pm.environment.set(\"demo_urn_0_urlencoded\", encodeURIComponent(demo_urn_0));",
+									"        pm.environment.set(\"demo_urn_1_urlencoded\", encodeURIComponent(demo_urn_1));",
+									"        pm.environment.set(\"demo_urn_2_urlencoded\", encodeURIComponent(demo_urn_2));",
+									"    }else{",
+									"        ",
+									"    }",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_domain}}/data/v1/projects/{{project_id_with_b}}/folders/{{one_folder_id}}/contents?filter[type]=items",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"data",
+								"v1",
+								"projects",
+								"{{project_id_with_b}}",
+								"folders",
+								"{{one_folder_id}}",
+								"contents"
+							],
+							"query": [
+								{
+									"key": "filter[type]",
+									"value": "items"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "05- GET current attributes values of some files",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0602851d-5d78-49b5-80a4-a0434bc1abdb",
+								"exec": [
+									"pm.test(\"Get custom attributes values of some files, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"record current custom values id of one files: \", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.results",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"    ",
+									"    if(find){",
+									"        var first_file_custom_attributes = find[0].customAttributes;",
+									"        //get all ids of current custom attributes (not null)",
+									"        var ids = []",
+									"        for(var i=0;i<first_file_custom_attributes.length;i++){",
+									"            ids.push(first_file_custom_attributes[i].id)",
+									"        }",
+									"        pm.environment.set(\"one_file_current_custom_attributes_ids\", JSON.stringify(ids)); ",
+									"    }else{",
+									"        ",
+									"    }",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-user-id",
+								"value": "BVE5MB3YCEMF",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"urns\": [\n          \"{{demo_urn_0}}\",\n          \"{{demo_urn_1}}\",\n          \"{{demo_urn_2}}\"\n         ]\n}"
+						},
+						"url": {
+							"raw": "{{base_domain}}/bim360/docs/v1/projects/{{project_id_without_b}}/versions:batch-get",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"docs",
+								"v1",
+								"projects",
+								"{{project_id_without_b}}",
+								"versions:batch-get"
+							]
+						},
+						"description": "https://developer.autodesk.com/api/view-and-data-api/#create-an-oauth2-token\n"
+					},
+					"response": []
+				},
+				{
+					"name": "06-GET custom attributes definition of one folder",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4a32386e-0acc-4d01-8d26-99fdac4be176",
+								"exec": [
+									"pm.test(\"Get custom attributes definitions, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"record custom definitions ids: \", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.results",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"    ",
+									"    if(find){",
+									"        //get all ids of custom attributes definitions",
+									"        //assume at least 3 custom attributes types are available: text, date, dropdown",
+									"        var text_custom_attribute_id = find.find(i=>i.type == \"string\").id",
+									"        var date_custom_attribute_id = find.find(i=>i.type == \"date\").id",
+									"        var dropdown_custom_attribute_id = find.find(i=>i.type == \"array\").id",
+									"        var one_dropdown_value = find.find(i=>i.type == \"array\").arrayValues[0];",
+									"",
+									"        pm.environment.set(\"text_custom_attribute_id\", Number(text_custom_attribute_id)); ",
+									"        pm.environment.set(\"date_custom_attribute_id\",Number(date_custom_attribute_id )); ",
+									"        pm.environment.set(\"dropdown_custom_attribute_id\", Number(dropdown_custom_attribute_id)); ",
+									"        pm.environment.set(\"one_dropdown_value\", one_dropdown_value); ",
+									"",
+									"    }else{",
+									"        ",
+									"    }",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/bim360/docs/v1/projects/{{project_id_without_b}}/folders/{{one_folder_id}}/custom-attribute-definitions",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"docs",
+								"v1",
+								"projects",
+								"{{project_id_without_b}}",
+								"folders",
+								"{{one_folder_id}}",
+								"custom-attribute-definitions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "07-Update custom values for one file",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2ed74b36-7f98-425f-b8ea-aeb62a043c79",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-user-id",
+								"type": "text",
+								"value": "BVE5MB3YCEMF",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n                {\n                    \"id\": {{text_custom_attribute_id}}, \n                    \"value\": \"Updated Text\"\n                },\n                {\n                    \"id\": {{date_custom_attribute_id}}, \n                    \"value\": null\n                },\n               {\n                    \"id\": {{dropdown_custom_attribute_id}}, \n                    \"value\": \"{{one_dropdown_value}}\"\n                }\n]"
+						},
+						"url": {
+							"raw": "{{base_domain}}/bim360/docs/v1/projects/{{project_id_without_b}}/versions/{{demo_urn_0_urlencoded}}/custom-attributes:batch-update",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"docs",
+								"v1",
+								"projects",
+								"{{project_id_without_b}}",
+								"versions",
+								"{{demo_urn_0_urlencoded}}",
+								"custom-attributes:batch-update"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Download PDF",
+			"item": [
+				{
+					"name": "01-GET one hub",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Get hub collection, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var hub_name = pm.environment.get(\"hub_name\") ",
+									"",
+									"pm.test(\"find matches hub by id: \" + hub_name, function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.data.find(d=>d.attributes.name == hub_name)",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"    ",
+									"    if(find){",
+									"        pm.environment.set(\"hub_id_with_b\", find.id);",
+									"        pm.environment.set(\"hub_id_without_b\", find.id.split(\"b.\").join(\"\"));",
+									"    }else{",
+									"        ",
+									"    }",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"id": "187fab22-f46b-4b26-b148-15f26444eacc"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/project/v1/hubs",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"project",
+								"v1",
+								"hubs"
+							]
+						},
+						"description": "GET all hubs of your account, and get one hub. Please provide the hub name (hub_name) in environment variables"
+					},
+					"response": []
+				},
+				{
+					"name": "02-GET one project id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f7779479-2ab5-4aba-990a-6d34668f2600",
+								"exec": [
+									"pm.test(\"Get project collection, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var project_name = pm.environment.get(\"project_name\") ",
+									"pm.test(\"find matches project by name: \" + project_name, function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.data.find(d=>d.attributes.name == project_name)",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"    ",
+									"    if(find){",
+									"        pm.environment.set(\"project_id_with_b\", find.id);",
+									"        pm.environment.set(\"project_id_without_b\", find.id.split(\"b.\").join(\"\"));",
+									"        pm.environment.set(\"root_folder_id\", find.relationships.rootFolder.data.id);",
+									"        ",
+									"    }else{",
+									"        ",
+									"    }",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/project/v1/hubs/{{hub_id_with_b}}/projects",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"project",
+								"v1",
+								"hubs",
+								"{{hub_id_with_b}}",
+								"projects"
+							]
+						},
+						"description": "GET all projects of one hub, and get one project Please provide the hub name (project_name) in environment variables"
+					},
+					"response": []
+				},
+				{
+					"name": "03-GET [Plans] folder id - you can also manually input one_folder_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a6304388-f097-41ac-90ee-fcaef79cf194",
+								"exec": [
+									"pm.test(\"Get project top folder, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"find [Project Files] folder id: \", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.data.find(d=>d.attributes.name == \"Project Files\" )",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"    ",
+									"    if(find){",
+									"        pm.environment.set(\"one_folder_id\", find.id);",
+									"    }else{",
+									"        ",
+									"    }",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/project/v1/hubs/{{hub_id_with_b}}/projects/{{project_id_with_b}}/topFolders",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"project",
+								"v1",
+								"hubs",
+								"{{hub_id_with_b}}",
+								"projects",
+								"{{project_id_with_b}}",
+								"topFolders"
+							],
+							"query": [
+								{
+									"key": "filter[attributes.name]",
+									"value": "{{one_folder_name}}",
+									"disabled": true
+								}
+							]
+						},
+						"description": "GET all projects of one hub, and get one project Please provide the hub name (project_name) in environment variables"
+					},
+					"response": []
+				},
+				{
+					"name": "04-GET some PDF urn",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "86af1c72-db01-4f51-b8d1-0d2ebe5b01c7",
+								"exec": [
+									"pm.test(\"Get folder content of [Project Files], Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"find one PDF urn: \", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.data.find(i=>i.attributes.extension.data.sourceFileName.includes(\".pdf\"))",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"    ",
+									"    if(find){",
+									"       ",
+									"        //get version id",
+									"        var demo_pdf_urn = find.relationships.tip.data.id",
+									"         ",
+									"         //url encoded",
+									"        pm.environment.set(\"demo_pdf_urn_urlencoded\", encodeURIComponent(demo_pdf_urn));",
+									"       ",
+									"    }else{",
+									"        ",
+									"    }",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_domain}}/data/v1/projects/{{project_id_with_b}}/folders/{{one_folder_id}}/contents?filter[type]=items",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"data",
+								"v1",
+								"projects",
+								"{{project_id_with_b}}",
+								"folders",
+								"{{one_folder_id}}",
+								"contents"
+							],
+							"query": [
+								{
+									"key": "filter[type]",
+									"value": "items"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "05-Start Download-include markup and includeHyperlinks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e51b46ec-38de-4d46-b48c-c9d9dfe891f3",
+								"exec": [
+									"pm.test(\"Start Download-include markup and includeHyperlinks, Status code is 200\", function () {",
+									"",
+									"    var body = JSON.parse(responseBody);",
+									"",
+									"    pm.environment.set(\"pdf_download_id\", body.id);",
+									"",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"includeMarkups\": true,\n        \"includeHyperlinks\": true\n}\n"
+						},
+						"url": {
+							"raw": "{{base_domain}}/bim360/docs/v1/projects/{{project_id_without_b}}/versions/{{demo_pdf_urn_urlencoded}}/exports",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"docs",
+								"v1",
+								"projects",
+								"{{project_id_without_b}}",
+								"versions",
+								"{{demo_pdf_urn_urlencoded}}",
+								"exports"
+							]
+						},
+						"description": "https://developer.autodesk.com/api/view-and-data-api/#create-an-oauth2-token\n"
+					},
+					"response": []
+				},
+				{
+					"name": "06-GET Download Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "85e5f622-8299-4981-b45c-2bc6b41ef792",
+								"exec": [
+									"pm.test(\"Get Download Status, Status code is 200\", function () {",
+									"",
+									"    var body = JSON.parse(responseBody);",
+									"",
+									"    if(body.status == \"completed\")",
+									"        pm.environment.set(\"pdf_download_url\", body.data.link);",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_domain}}/bim360/docs/v1/projects/{{project_id_without_b}}/versions/{{demo_pdf_urn_urlencoded}}/exports/{{pdf_download_id}}",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"docs",
+								"v1",
+								"projects",
+								"{{project_id_without_b}}",
+								"versions",
+								"{{demo_pdf_urn_urlencoded}}",
+								"exports",
+								"{{pdf_download_id}}"
+							]
+						},
+						"description": "https://developer.autodesk.com/api/view-and-data-api/#create-an-oauth2-token\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Download PDF",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{pdf_download_url}}",
+							"host": [
+								"{{pdf_download_url}}"
+							]
+						},
+						"description": "https://developer.autodesk.com/api/view-and-data-api/#create-an-oauth2-token\n"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Folder Permission",
+			"item": [
+				{
+					"name": "01-GET one hub",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Get hub collection, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var hub_name = pm.environment.get(\"hub_name\") ",
+									"",
+									"pm.test(\"find matches hub by id: \" + hub_name, function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.data.find(d=>d.attributes.name == hub_name)",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"    ",
+									"    if(find){",
+									"        pm.environment.set(\"hub_id_with_b\", find.id);",
+									"        pm.environment.set(\"hub_id_without_b\", find.id.split(\"b.\").join(\"\"));",
+									"    }else{",
+									"        ",
+									"    }",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"id": "f93aa9e4-2d3e-46fb-8f17-c28498f3f16f"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/project/v1/hubs",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"project",
+								"v1",
+								"hubs"
+							]
+						},
+						"description": "GET all hubs of your account, and get one hub. Please provide the hub name (hub_name) in environment variables"
+					},
+					"response": []
+				},
+				{
+					"name": "02-GET one project id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "10d7291c-fbb7-4edc-bbbf-93d9125503d7",
+								"exec": [
+									"pm.test(\"Get project collection, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var project_name = pm.environment.get(\"project_name\") ",
+									"pm.test(\"find matches project by name: \" + project_name, function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.data.find(d=>d.attributes.name == project_name)",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"    ",
+									"    if(find){",
+									"        pm.environment.set(\"project_id_with_b\", find.id);",
+									"        pm.environment.set(\"project_id_without_b\", find.id.split(\"b.\").join(\"\"));",
+									"        pm.environment.set(\"root_folder_id\", find.relationships.rootFolder.data.id);",
+									"        ",
+									"    }else{",
+									"        ",
+									"    }",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/project/v1/hubs/{{hub_id_with_b}}/projects",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"project",
+								"v1",
+								"hubs",
+								"{{hub_id_with_b}}",
+								"projects"
+							]
+						},
+						"description": "GET all projects of one hub, and get one project Please provide the hub name (project_name) in environment variables"
+					},
+					"response": []
+				},
+				{
+					"name": "03-GET one folder id - you can also manually input one_folder_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b536e08a-1802-42ea-a27a-202b3bc516b2",
+								"exec": [
+									"pm.test(\"Get project top folder and find one folder, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"find project file folder id: \", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.data.find(d=>d.attributes.name == \"Project Files\" )",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"    ",
+									"    if(find){",
+									"        pm.environment.set(\"one_folder_id\", find.id);",
+									"    }else{",
+									"        ",
+									"    }",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/project/v1/hubs/{{hub_id_with_b}}/projects/{{project_id_with_b}}/topFolders",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"project",
+								"v1",
+								"hubs",
+								"{{hub_id_with_b}}",
+								"projects",
+								"{{project_id_with_b}}",
+								"topFolders"
+							],
+							"query": [
+								{
+									"key": "filter[attributes.name]",
+									"value": "{{one_folder_name}}",
+									"disabled": true
+								}
+							]
+						},
+						"description": "GET all projects of one hub, and get one project Please provide the hub name (project_name) in environment variables"
+					},
+					"response": []
+				},
+				{
+					"name": "04-List permissions in a folder",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1d59896b-39f7-4f5c-abb6-9e0218f0534a",
+								"exec": [
+									"pm.test(\"List project users - Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"find one user id: \", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.results ",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"",
+									"    ",
+									"    pm.environment.set(\"one_user_autodeskId\", find.autodeskId); ",
+									"    ",
+									"});",
+									"",
+									"  "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "x-user-id",
+								"value": "BVE5MB3YCEMF"
+							}
+						],
+						"url": {
+							"raw": "{{base_domain}}/bim360/docs/v1/projects/{{project_id_without_b}}/folders/{{one_folder_id}}/permissions",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"docs",
+								"v1",
+								"projects",
+								"{{project_id_without_b}}",
+								"folders",
+								"{{one_folder_id}}",
+								"permissions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "05-Get project user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "734b2cfe-f0e2-4b6d-a729-5d2d008f5a70",
+								"exec": [
+									"pm.test(\"Get project user - Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"find one user id: \", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.results ",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"",
+									"    //assume at least two users in the projects. one is admin, the other is common  member",
+									"    var project_admin = find.find(i=>i.accessLevels.projectAdmin == true)",
+									"    var project_member = find.find(i=>i.accessLevels.projectAdmin == false)",
+									"",
+									"    pm.environment.set(\"project_admin_autodeskId\", project_admin.autodeskId); ",
+									"    pm.environment.set(\"project_member_autodeskId\", project_member.autodeskId); ",
+									"    pm.environment.set(\"project_admin_subjectId\", project_admin.id); ",
+									"    pm.environment.set(\"project_member_subjectId\", project_member.id); ",
+									"    ",
+									"});",
+									"",
+									"  "
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "be02063d-21e2-493b-948d-3722ce00c876",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "User-Id",
+								"type": "text",
+								"value": "200902260532621",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{base_domain}}/bim360/admin/v1/projects/{{project_id_with_b}}/users",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"admin",
+								"v1",
+								"projects",
+								"{{project_id_with_b}}",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "05-permissions:batch-create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "813fb056-dbc5-4adc-925f-b91748a4263b",
+								"exec": [
+									"pm.test(\"permissions:batch-create - Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n      \"subjectId\": \"{{project_member_subjectId}}\",\n      \"subjectType\": \"USER\",\n      \"actions\": [\n        \"PUBLISH\"\n      ]\n    }\n]"
+						},
+						"url": {
+							"raw": "{{base_domain}}/bim360/docs/v1/projects/{{project_id_without_b}}/folders/{{one_folder_id}}/permissions:batch-create",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"docs",
+								"v1",
+								"projects",
+								"{{project_id_without_b}}",
+								"folders",
+								"{{one_folder_id}}",
+								"permissions:batch-create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "06-permissions:batch-update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "480c913a-72e6-4f9b-bb89-e5f96ef6fb56",
+								"exec": [
+									"pm.test(\"permissions:batch-update - Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/vnd.api+json"
+							},
+							{
+								"key": "x-user-id",
+								"value": "77Q5JT463CV3",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n        {\n          \"subjectId\": \"{{project_member_subjectId}}\",\n          \"subjectType\": \"USER\",\n          \"actions\": [\n            \"PUBLISH\",\n            \"VIEW\",\n            \"DOWNLOAD\",\n            \"COLLABORATE\",\n            \"EDIT\",\n            \"CONTROL\"\n          ]\n        }\n]"
+						},
+						"url": {
+							"raw": "{{base_domain}}/bim360/docs/v1/projects/{{project_id_without_b}}/folders/{{one_folder_id}}/permissions:batch-update",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"docs",
+								"v1",
+								"projects",
+								"{{project_id_without_b}}",
+								"folders",
+								"{{one_folder_id}}",
+								"permissions:batch-update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "07-delete permissions in a folder",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5d60a7d2-a709-4c56-8147-be33ae948676",
+								"exec": [
+									"pm.test(\"permissions:batch-delete - Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-user-id",
+								"value": "4V4WKQJGGQ7N",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n      {\n        \"subjectId\": \"{{project_member_subjectId}}\",\n        \"subjectType\": \"USER\" \n      }  \n]"
+						},
+						"url": {
+							"raw": "{{base_domain}}/bim360/docs/v1/projects/{{project_id_without_b}}/folders/{{one_folder_id}}/permissions:batch-delete",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"docs",
+								"v1",
+								"projects",
+								"{{project_id_without_b}}",
+								"folders",
+								"{{one_folder_id}}",
+								"permissions:batch-delete"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "GET 2Legged Token -Optional - when you need to test with 2LO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests [\"Status code is 200\"] =responseCode.code === 200 ;",
+							"tests [\"Content-Type is present\"] =responseHeaders.hasOwnProperty (\"Content-Type\") ;",
+							"tests [\"Content-Type is json\"] =postman.getResponseHeader (\"Content-Type\").indexOf (\"application/json\") !== -1 ;",
+							"",
+							"var data =JSON.parse (responseBody) ;",
+							"tests [\"Bearer ok\"] =data.access_token !== '' ;",
+							"",
+							"postman.setEnvironmentVariable (\"access_token\", data.access_token) ;",
+							""
+						],
+						"id": "d171b05f-e560-407d-9273-4109a3ddf498"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "{{client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{client_secret}}",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "data:write data:read",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_domain}}/authentication/v1/authenticate",
+					"host": [
+						"{{base_domain}}"
+					],
+					"path": [
+						"authentication",
+						"v1",
+						"authenticate"
+					]
+				},
+				"description": "https://developer.autodesk.com/api/view-and-data-api/#create-an-oauth2-token\n"
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "accessToken",
+				"value": "eyJhbGciOiJIUzI1NiIsImtpZCI6Imp3dF9zeW1tZXRyaWNfa2V5In0.eyJzY29wZSI6WyJkYXRhOndyaXRlIiwiZGF0YTpyZWFkIiwiYWNjb3VudDpyZWFkIl0sImNsaWVudF9pZCI6InJBWmo0YnYxOVhGbUUwMjVhUzJlYWxkR0JOVVVPbm42IiwiZ3JhbnRfaWQiOiI1UlpBUG90U0pqZm13dmVIdGVQMDVENFdwN09xRzBSSiIsImF1ZCI6Imh0dHBzOi8vYXV0b2Rlc2suY29tL2F1ZC9qd3RleHA2MCIsImp0aSI6IkJHU3N5Wjg2NkRsRm9DZEozVVNKbGVjQ1g3SHNBNVFROHBwakFxUU1KbFVsbVBjYm5FcDEwWmpsUUxET1ZSWFUiLCJ1c2VyaWQiOiIyMDA5MDIyNjA1MzI2MjEiLCJleHAiOjE1OTczOTE1MjN9.mz11WNax7fMGnFC_Lf8AZzIEBUYWqfL00y7Op_BIbT0",
+				"type": "string"
+			},
+			{
+				"key": "tokenType",
+				"value": "Bearer",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "987cf9b1-389f-4494-aa80-7b1a7c41d72b",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "0efcdcf2-830a-4d4f-be54-c441a6d1f92e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
