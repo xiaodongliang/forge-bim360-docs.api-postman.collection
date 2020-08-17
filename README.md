@@ -7,7 +7,11 @@
 
 ## Description
 
-This repository provides demos for the category of [BIM360 Document Management (Docs) API](https://forge.autodesk.com/en/docs/bim360/v1/reference/http/document-management-projects-project_id-versions-version_id-exports-POST/) 
+This repository provides demos for the category of [BIM360 Document Management (Docs) API](https://forge.autodesk.com/en/docs/bim360/v1/reference/http/document-management-projects-project_id-versions-version_id-exports-POST/) . Right now, the APIs demos are:
+ * Custom Attributes
+ * Folder Permissions
+ * Download PDF
+The collection will be kept updated with new APIs. As to Get Documents/Items/Versions/Objects, they belong to Data Management APIs. This collection does not include them.
 
 ## What's Postman?
 
