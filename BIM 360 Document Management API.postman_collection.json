@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "38f98ad1-4882-4485-a617-d4b9e553c95b",
+		"_postman_id": "5184a614-1b66-454d-9b9f-9d1947a821e3",
 		"name": "BIM 360 Document Management API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -14,7 +14,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"type": "text/javascript",
+								"id": "18dd9ba0-f444-48dc-9b82-fe183f458dc9",
 								"exec": [
 									"pm.test(\"Get hub collection, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -39,7 +39,7 @@
 									"",
 									"     "
 								],
-								"id": "8322527c-84dc-4e29-9e32-4e1da0537bff"
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -67,7 +67,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "c4706e03-c947-486d-9236-e78575748910",
+								"id": "af4c1efe-634a-4e32-9f97-d757008fca4e",
 								"exec": [
 									"pm.test(\"Get project collection, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -118,12 +118,12 @@
 					"response": []
 				},
 				{
-					"name": "03-GET [Project Files] folder id - you can also manually input one_folder_id",
+					"name": "03-GET [Project Files] folder id - OR manually input one_folder_id",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
-								"id": "c6071782-0023-44ff-bfb0-99314e9cd812",
+								"id": "2b74bd73-6608-4470-8491-2d994840e5b2",
 								"exec": [
 									"pm.test(\"Get project top folder, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -184,7 +184,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "9406403e-749e-4019-a12c-ab231e791882",
+								"id": "4088962b-c853-4479-8bae-1dda637b2d60",
 								"exec": [
 									"pm.test(\"Get folder content of [Project Files], Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -262,7 +262,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "0602851d-5d78-49b5-80a4-a0434bc1abdb",
+								"id": "6a756813-6160-49ab-a031-a0ccaacb1755",
 								"exec": [
 									"pm.test(\"Get custom attributes values of some files, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -331,12 +331,401 @@
 					"response": []
 				},
 				{
-					"name": "06-GET custom attributes definition of one folder",
+					"name": "06-GET current custom attributes definition",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
-								"id": "4a32386e-0acc-4d01-8d26-99fdac4be176",
+								"id": "40df4918-b5af-466e-982e-2d6e55004a93",
+								"exec": [
+									"pm.test(\"Get custom attributes definitions, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Get custom definitions ids: \", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.results",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"    ",
+									"    if(find){",
+									"        //get all ids of custom attributes definitions",
+									"        //assume at least 3 custom attributes types are available: text, date, dropdown",
+									"        var text_custom_attribute_id = find.find(i=>i.type == \"string\").id",
+									"        var date_custom_attribute_id = find.find(i=>i.type == \"date\").id",
+									"        var dropdown_custom_attribute_id = find.find(i=>i.type == \"array\").id",
+									"        var one_dropdown_value = find.find(i=>i.type == \"array\").arrayValues[0];",
+									"",
+									"        pm.environment.set(\"text_custom_attribute_id\", Number(text_custom_attribute_id)); ",
+									"        pm.environment.set(\"date_custom_attribute_id\",Number(date_custom_attribute_id )); ",
+									"        pm.environment.set(\"dropdown_custom_attribute_id\", Number(dropdown_custom_attribute_id)); ",
+									"        pm.environment.set(\"one_dropdown_value\", one_dropdown_value); ",
+									"",
+									"    }else{",
+									"        ",
+									"    }",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/bim360/docs/v1/projects/{{project_id_without_b}}/folders/{{one_folder_id}}/custom-attribute-definitions",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"docs",
+								"v1",
+								"projects",
+								"{{project_id_without_b}}",
+								"folders",
+								"{{one_folder_id}}",
+								"custom-attribute-definitions"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "offset",
+									"value": "4",
+									"disabled": true
+								}
+							]
+						},
+						"description": "assume the folder has at least: \n\none custom attribute definition of string\n\none custom attribute definition of date\n\none custom attribute definition of array"
+					},
+					"response": []
+				},
+				{
+					"name": "07-Update custom values for one file",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "90845fb5-0e23-4dcb-877b-f66e0290603c",
+								"exec": [
+									"var d = new Date()",
+									"var current_time = d.getFullYear() ",
+									"                +\"-\" + ((\"0\" + (d.getUTCMonth()+1)).slice(-2) )",
+									"                + \"-\" +  (\"0\" + d.getUTCDate()).slice(-2) ",
+									"                ",
+									"pm.environment.set(\"current_time\", current_time);",
+									" "
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "1c6654f7-1d37-4f8b-bddc-2221d89a1efe",
+								"exec": [
+									"pm.test(\"Update custom values for one file, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-user-id",
+								"type": "text",
+								"value": "BVE5MB3YCEMF",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n                {\n                    \"id\": {{text_custom_attribute_id}}, \n                    \"value\": \"Updated Text by API\"\n                },\n                {\n                    \"id\": {{date_custom_attribute_id}}, \n                    \"value\": \"{{current_time}}\"\n                },\n               {\n                    \"id\": {{dropdown_custom_attribute_id}}, \n                    \"value\": \"{{one_dropdown_value}}\"\n                }\n]"
+						},
+						"url": {
+							"raw": "{{base_domain}}/bim360/docs/v1/projects/{{project_id_without_b}}/versions/{{demo_urn_0_urlencoded}}/custom-attributes:batch-update",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"docs",
+								"v1",
+								"projects",
+								"{{project_id_without_b}}",
+								"versions",
+								"{{demo_urn_0_urlencoded}}",
+								"custom-attributes:batch-update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "08-Create custom def - text",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "f00cd2a6-77ac-4664-9c35-f78bf797f5d5",
+								"exec": [
+									"const radom_string = Math.random().toString().substr(2, 8); ",
+									"pm.environment.set(\"radom_string\", radom_string);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "ace5ae5f-0426-452c-ba1a-9eede3eb8446",
+								"exec": [
+									"pm.test(\"Create custom def - text, Status code is 200\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"get custom definitions id: \", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"",
+									"    pm.expect(body).not.eq(undefined); ",
+									"    ",
+									"    if(body){  ",
+									"        pm.environment.set(\"custom_def_created_by_api_text_id\", Number(body.id));   ",
+									"    }else{",
+									"        ",
+									"    }",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-user-id",
+								"type": "text",
+								"value": "BVE5MB3YCEMF",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"name\": \"my-column-text-{{radom_string}}\",\n        \"type\": \"string\" \n}"
+						},
+						"url": {
+							"raw": "{{base_domain}}/bim360/docs/v1/projects/{{project_id_without_b}}/folders/{{one_folder_id}}/custom-attribute-definitions",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"docs",
+								"v1",
+								"projects",
+								"{{project_id_without_b}}",
+								"folders",
+								"{{one_folder_id}}",
+								"custom-attribute-definitions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "09-Create custom def - array",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "7936eb86-0c3e-4d3a-9ba2-9857975b2d37",
+								"exec": [
+									"const radom_string = Math.random().toString().substr(2, 8); ",
+									"pm.environment.set(\"radom_string\", radom_string);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "61b1fc87-457e-4190-822e-586bcacc1678",
+								"exec": [
+									"pm.test(\"Create custom def - array, Status code is 200\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"get custom definitions id: \", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"",
+									"    pm.expect(body).not.eq(undefined); ",
+									"    ",
+									"    if(body){  ",
+									"        pm.environment.set(\"custom_def_created_by_api_array_id\", Number(body.id));   ",
+									"        pm.environment.set(\"created_by_api_value1\", \"created_by_api_value1\"); ",
+									"",
+									"    }else{",
+									"        ",
+									"    }",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-user-id",
+								"type": "text",
+								"value": "BVE5MB3YCEMF",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"name\": \"my-column-array-{{radom_string}}\",\n        \"type\": \"array\",\n        \"arrayValues\": [\n          \"created_by_api_value1\",\n          \"created_by_api_value2\",\n          \"created_by_api_value3\"\n        ]\n}"
+						},
+						"url": {
+							"raw": "{{base_domain}}/bim360/docs/v1/projects/{{project_id_without_b}}/folders/{{one_folder_id}}/custom-attribute-definitions",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"docs",
+								"v1",
+								"projects",
+								"{{project_id_without_b}}",
+								"folders",
+								"{{one_folder_id}}",
+								"custom-attribute-definitions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "10-Create custom def - date",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "084cb4f6-47d1-4b39-8e62-5d0f563950e3",
+								"exec": [
+									"const radom_string = Math.random().toString().substr(2, 8); ",
+									"pm.environment.set(\"radom_string\", radom_string);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "93df1feb-65f3-487e-a0c8-0b0b8c065cf9",
+								"exec": [
+									"pm.test(\"Create custom def - date, Status code is 200\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"get custom definitions id: \", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"",
+									"    pm.expect(body).not.eq(undefined); ",
+									"    ",
+									"    if(body){  ",
+									"        pm.environment.set(\"custom_def_created_by_api_date_id\", Number(body.id));   ",
+									"    }else{",
+									"        ",
+									"    }",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-user-id",
+								"type": "text",
+								"value": "BVE5MB3YCEMF",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"name\": \"my-column-date-{{radom_string}}\",\n        \"type\": \"date\" \n}"
+						},
+						"url": {
+							"raw": "{{base_domain}}/bim360/docs/v1/projects/{{project_id_without_b}}/folders/{{one_folder_id}}/custom-attribute-definitions",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"docs",
+								"v1",
+								"projects",
+								"{{project_id_without_b}}",
+								"folders",
+								"{{one_folder_id}}",
+								"custom-attribute-definitions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "11-GET custom attributes definition again",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5afa17fa-b6d8-4c3d-98b8-d2fb112c6d78",
 								"exec": [
 									"pm.test(\"Get custom attributes definitions, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -390,20 +779,50 @@
 								"folders",
 								"{{one_folder_id}}",
 								"custom-attribute-definitions"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "offset",
+									"value": "4",
+									"disabled": true
+								}
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "07-Update custom values for one file",
+					"name": "12- Update custom values of NEW defs",
 					"event": [
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "2ed74b36-7f98-425f-b8ea-aeb62a043c79",
+								"id": "6060052b-3c0c-43df-97c9-959af616afe7",
 								"exec": [
-									""
+									"var d = new Date()",
+									"var current_time = d.getFullYear() ",
+									"                +\"-\" + ((\"0\" + (d.getUTCMonth()+1)).slice(-2) )",
+									"                + \"-\" +  (\"0\" + d.getUTCDate()).slice(-2) ",
+									"                ",
+									"pm.environment.set(\"current_time\", current_time);",
+									" "
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "2b273612-cef4-498f-8361-6c0dfe4d7390",
+								"exec": [
+									"pm.test(\"Update custom values for one file, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -425,7 +844,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n                {\n                    \"id\": {{text_custom_attribute_id}}, \n                    \"value\": \"Updated Text\"\n                },\n                {\n                    \"id\": {{date_custom_attribute_id}}, \n                    \"value\": null\n                },\n               {\n                    \"id\": {{dropdown_custom_attribute_id}}, \n                    \"value\": \"{{one_dropdown_value}}\"\n                }\n]"
+							"raw": "[\n                {\n                    \"id\": {{custom_def_created_by_api_text_id}}, \n                    \"value\": \"Updated Text by API\"\n                },\n                {\n                    \"id\": {{custom_def_created_by_api_date_id}}, \n                    \"value\": \"{{current_time}}\"\n                },\n               {\n                    \"id\": {{custom_def_created_by_api_array_id}}, \n                    \"value\": \"{{created_by_api_value1}}\"\n                }\n]"
 						},
 						"url": {
 							"raw": "{{base_domain}}/bim360/docs/v1/projects/{{project_id_without_b}}/versions/{{demo_urn_0_urlencoded}}/custom-attributes:batch-update",
@@ -443,6 +862,130 @@
 								"custom-attributes:batch-update"
 							]
 						}
+					},
+					"response": []
+				},
+				{
+					"name": "13-Clear some custom values",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "c37007eb-26bb-4b65-a1b7-cce620d9e9d9",
+								"exec": [
+									"var d = new Date()",
+									"var current_time = d.getFullYear() ",
+									"                +\"-\" + ((\"0\" + (d.getUTCMonth()+1)).slice(-2) )",
+									"                + \"-\" +  (\"0\" + d.getUTCDate()).slice(-2) ",
+									"                + \"T\" +(\"0\" + d.getUTCHours()).slice(-2) ",
+									"                + \":\" + (\"0\" + d.getUTCMinutes()).slice(-2) ",
+									"                + \":\" + (\"0\" + d.getUTCSeconds()).slice(-2) ",
+									"                + \".000Z\"",
+									"pm.environment.set(\"current_time\", current_time);",
+									" "
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "a1664e69-c34a-4790-ab60-b32ed57d4336",
+								"exec": [
+									"pm.test(\"Clear some custom values, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-user-id",
+								"type": "text",
+								"value": "BVE5MB3YCEMF",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n                {\n                    \"id\": {{text_custom_attribute_id}}, \n                    \"value\": null\n                },\n                {\n                    \"id\": {{date_custom_attribute_id}}, \n                    \"value\": null\n                },\n               {\n                    \"id\": {{dropdown_custom_attribute_id}}, \n                    \"value\": null\n                }\n]"
+						},
+						"url": {
+							"raw": "{{base_domain}}/bim360/docs/v1/projects/{{project_id_without_b}}/versions/{{demo_urn_0_urlencoded}}/custom-attributes:batch-update",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"docs",
+								"v1",
+								"projects",
+								"{{project_id_without_b}}",
+								"versions",
+								"{{demo_urn_0_urlencoded}}",
+								"custom-attributes:batch-update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "14- GET current attributes values again",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1a56edf5-c032-47d1-a805-cc2843ce3491",
+								"exec": [
+									"pm.test(\"Get custom attributes definitions, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-user-id",
+								"type": "text",
+								"value": "BVE5MB3YCEMF",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"urns\": [\n          \"{{demo_urn_0}}\",\n          \"{{demo_urn_1}}\",\n          \"{{demo_urn_2}}\"\n         ]\n}"
+						},
+						"url": {
+							"raw": "{{base_domain}}/bim360/docs/v1/projects/{{project_id_without_b}}/versions:batch-get",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"docs",
+								"v1",
+								"projects",
+								"{{project_id_without_b}}",
+								"versions:batch-get"
+							]
+						},
+						"description": "https://developer.autodesk.com/api/view-and-data-api/#create-an-oauth2-token\n"
 					},
 					"response": []
 				}
@@ -483,7 +1026,7 @@
 									"",
 									"     "
 								],
-								"id": "187fab22-f46b-4b26-b148-15f26444eacc"
+								"id": "6235138c-b92e-4abb-aff7-3b1f8bcd04b8"
 							}
 						}
 					],
@@ -511,7 +1054,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "f7779479-2ab5-4aba-990a-6d34668f2600",
+								"id": "39b27322-ae51-418f-8ac5-5d955e04c9f7",
 								"exec": [
 									"pm.test(\"Get project collection, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -567,7 +1110,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "a6304388-f097-41ac-90ee-fcaef79cf194",
+								"id": "3f8d78da-a2f0-4268-afe0-31da591300cf",
 								"exec": [
 									"pm.test(\"Get project top folder, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -628,7 +1171,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "86af1c72-db01-4f51-b8d1-0d2ebe5b01c7",
+								"id": "0831dd26-22a6-43b6-b6ae-3eee4a76728f",
 								"exec": [
 									"pm.test(\"Get folder content of [Project Files], Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -699,7 +1242,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "e51b46ec-38de-4d46-b48c-c9d9dfe891f3",
+								"id": "52d1b17b-42d7-480b-837c-1c5f29c9cb04",
 								"exec": [
 									"pm.test(\"Start Download-include markup and includeHyperlinks, Status code is 200\", function () {",
 									"",
@@ -757,7 +1300,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "85e5f622-8299-4981-b45c-2bc6b41ef792",
+								"id": "b7f48fc6-5885-4893-b399-4eb24f61a578",
 								"exec": [
 									"pm.test(\"Get Download Status, Status code is 200\", function () {",
 									"",
@@ -859,7 +1402,7 @@
 									"",
 									"     "
 								],
-								"id": "f93aa9e4-2d3e-46fb-8f17-c28498f3f16f"
+								"id": "290cb3f8-9b58-4e78-b228-8f27e6b4650b"
 							}
 						}
 					],
@@ -887,7 +1430,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "10d7291c-fbb7-4edc-bbbf-93d9125503d7",
+								"id": "d6c1f7e4-469f-4426-b28e-783dbfdbfd95",
 								"exec": [
 									"pm.test(\"Get project collection, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -943,7 +1486,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "b536e08a-1802-42ea-a27a-202b3bc516b2",
+								"id": "a63c4d5e-b1dc-4ef5-bd5c-4e8c08251bfd",
 								"exec": [
 									"pm.test(\"Get project top folder and find one folder, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -1004,7 +1547,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "1d59896b-39f7-4f5c-abb6-9e0218f0534a",
+								"id": "cf6f51b5-3ed6-4cd8-b9e1-64fd580de498",
 								"exec": [
 									"pm.test(\"List project users - Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -1064,7 +1607,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "734b2cfe-f0e2-4b6d-a729-5d2d008f5a70",
+								"id": "908d2907-0806-43fd-bdf2-df625e49edb9",
 								"exec": [
 									"pm.test(\"Get project user - Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -1095,7 +1638,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "be02063d-21e2-493b-948d-3722ce00c876",
+								"id": "8aeffe29-d1bc-40c8-a574-bb6d87d0ac72",
 								"exec": [
 									""
 								],
@@ -1145,7 +1688,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "813fb056-dbc5-4adc-925f-b91748a4263b",
+								"id": "c7bbec55-0bc6-4f29-951c-28b2cdd08fcf",
 								"exec": [
 									"pm.test(\"permissions:batch-create - Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -1196,7 +1739,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "480c913a-72e6-4f9b-bb89-e5f96ef6fb56",
+								"id": "bce98821-cc2b-4036-8540-899175c3a71c",
 								"exec": [
 									"pm.test(\"permissions:batch-update - Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -1253,7 +1796,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "5d60a7d2-a709-4c56-8147-be33ae948676",
+								"id": "df132292-2a41-4108-98f4-bcc9375b80d6",
 								"exec": [
 									"pm.test(\"permissions:batch-delete - Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -1324,7 +1867,7 @@
 							"postman.setEnvironmentVariable (\"access_token\", data.access_token) ;",
 							""
 						],
-						"id": "d171b05f-e560-407d-9273-4109a3ddf498"
+						"id": "283d92b3-5cae-4ca2-b199-9d41bf2eee62"
 					}
 				}
 			],
@@ -1381,18 +1924,63 @@
 		"type": "oauth2",
 		"oauth2": [
 			{
-				"key": "accessToken",
-				"value": "eyJhbGciOiJIUzI1NiIsImtpZCI6Imp3dF9zeW1tZXRyaWNfa2V5In0.eyJzY29wZSI6WyJkYXRhOndyaXRlIiwiZGF0YTpyZWFkIiwiYWNjb3VudDpyZWFkIl0sImNsaWVudF9pZCI6InJBWmo0YnYxOVhGbUUwMjVhUzJlYWxkR0JOVVVPbm42IiwiZ3JhbnRfaWQiOiI1UlpBUG90U0pqZm13dmVIdGVQMDVENFdwN09xRzBSSiIsImF1ZCI6Imh0dHBzOi8vYXV0b2Rlc2suY29tL2F1ZC9qd3RleHA2MCIsImp0aSI6IkJHU3N5Wjg2NkRsRm9DZEozVVNKbGVjQ1g3SHNBNVFROHBwakFxUU1KbFVsbVBjYm5FcDEwWmpsUUxET1ZSWFUiLCJ1c2VyaWQiOiIyMDA5MDIyNjA1MzI2MjEiLCJleHAiOjE1OTczOTE1MjN9.mz11WNax7fMGnFC_Lf8AZzIEBUYWqfL00y7Op_BIbT0",
+				"key": "scope",
+				"value": "data:read data:write",
 				"type": "string"
 			},
 			{
-				"key": "tokenType",
-				"value": "Bearer",
+				"key": "tokenName",
+				"value": "access_token",
+				"type": "string"
+			},
+			{
+				"key": "challengeAlgorithm",
+				"value": "S256",
+				"type": "string"
+			},
+			{
+				"key": "redirect_uri",
+				"value": "https://www.getpostman.com/oauth2/callback",
+				"type": "string"
+			},
+			{
+				"key": "grant_type",
+				"value": "authorization_code",
+				"type": "string"
+			},
+			{
+				"key": "clientSecret",
+				"value": "{{client_secret}}",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "{{client_id}}",
+				"type": "string"
+			},
+			{
+				"key": "authUrl",
+				"value": "https://developer.api.autodesk.com/authentication/v1/authorize",
 				"type": "string"
 			},
 			{
 				"key": "addTokenTo",
 				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "client_authentication",
+				"value": "body",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "https://developer.api.autodesk.com/authentication/v1/gettoken",
+				"type": "string"
+			},
+			{
+				"key": "tokenType",
+				"value": "Bearer",
 				"type": "string"
 			}
 		]
@@ -1401,7 +1989,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "987cf9b1-389f-4494-aa80-7b1a7c41d72b",
+				"id": "bea452b7-4801-42c3-8586-c9fece1aef06",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -1411,7 +1999,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "0efcdcf2-830a-4d4f-be54-c441a6d1f92e",
+				"id": "6306c768-1682-4a59-a147-434e657b689e",
 				"type": "text/javascript",
 				"exec": [
 					""
