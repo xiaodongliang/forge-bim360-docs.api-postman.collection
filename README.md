@@ -41,34 +41,39 @@ Postman is a popular tool that provides an easy-to-use interface to send HTTP re
 
 6. In environment, input _client id_, _client secret_, _hub name_ with __account name__, and _project name_ as __project name__
 
-
    <p align="center"><img src="./help/apiref-env.png" width="800" ></p>  
 
-7. In context menu of collection >> **Edit**, switch to the tab **Authorization**. Click **Get New Access Token**, input the variables as below:
+## Generate Token
+
+This collection takes **[Inheriting auth](https://learning.getpostman.com/docs/postman/sending-api-requests/authorization/#inheriting-auth)** to apply 3-legged token to every endpoint in the collection automatically, which means it does not need to input the token in the header explicitly.
+
+Some Forge API endpoints support 3-legged token only, some may support both 2-legged token and 3-legged token.
+
+
+### 2-legged token scenario
+ In context menu of collection >> **Edit**, switch to the tab **Authorization**. switch type to **Bearer Token**. Input the token name as **access_token**
+
+   <p align="center"><img src="./help/apiref-bearer.png" width="800" ></p> 
+ In such scenario, before running other scripts, firstly run the script __GET 2Legged Token -Optional - when you need to test with 2LO__
+
+### 3-legged token scenario
+   In context menu of collection >> **Edit**, switch to the tab **Authorization**. switch type to **OAuth 2.0**:
+   <p align="center"><img src="./help/apiref-oauth2.png" width="800" ></p> 
+
+   input the variables in __Configure New Token__.  **Get New Access Token**, and **Update**
 
    - Grant Type ``Authorization Code``
-   
    - Callback URL  ``https://www.getpostman.com/oauth2/callback``
-
    - Auth URL  ``https://developer.api.autodesk.com/authentication/v1/authorize``
-
    - Access Token URL  ``https://developer.api.autodesk.com/authentication/v1/gettoken``
-
    - Client ID ``{{client_id}}``
-
    - Client Secret ``{{client_secret}}``
-
    - Scope ``data:read``
-
    - Client Authentication ``Send Client credentials body``
 
-   <p align="center"><img src="./help/apiref-oauth2.png" width="800" ></p> 
- 
- 8. Click **Request Token**, it will direct to login Autodesk account, after it succeeds, the token will be generated. Click **Use Token**. Then, click **Update** to close the window of **Edit**
+   Click **Request Token**, it will direct to login Autodesk account, after it succeeds, the token will be generated. Click **Use Token**. Then, click **Update** to close the window of **Edit**
 
    <p align="center"><img src="./help/token.png" width="600" ></p> 
-   
-   RFI API requires to work with 3-legged token. This collection takes **[Inheriting auth](https://learning.getpostman.com/docs/postman/sending-api-requests/authorization/#inheriting-auth)** to apply 3-legged token to every endpoint in the collection automatically, which means it does not need to input the token in the header explicitly.
 
 ## API Test
 
@@ -80,14 +85,6 @@ Postman is a popular tool that provides an easy-to-use interface to send HTTP re
 3. With [Postman Runner](https://learning.postman.com/docs/running-collections/intro-to-collection-runs/), these scripts can be chained to perform auto-test. Check **Tests** tab to define your preferred tests.
 
    <p align="center"><img src="./help/runner.png" width="600" ></p> 
-
-
-## Notes
-1. Some APIs of Document Management support 2-legged token and 3-legged token. This collection takes **[Inheriting auth](https://learning.getpostman.com/docs/postman/sending-api-requests/authorization/#inheriting-auth)** to apply 3-legged token to every endpoint in the collection, which means it does not need to input the token in the header explicitly. 
-
-2. One independent script **GET 2Legged Token -Optional - when you need to test with 2LO** is available in case of use. When using 2legged token, please switch the Authorization type to **No Auh**, and input access token in  the header.
-
-   <p align="center"><img src="./help/noauth.png" width="600" ></p> 
 
 
 ## License
