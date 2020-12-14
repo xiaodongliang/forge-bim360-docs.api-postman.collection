@@ -45,7 +45,7 @@ Postman is a popular tool that provides an easy-to-use interface to send HTTP re
 
 ## Generate Token
 
-This collection takes **[Inheriting auth](https://learning.getpostman.com/docs/postman/sending-api-requests/authorization/#inheriting-auth)** to apply 3-legged token to every endpoint in the collection automatically, which means it does not need to input the token in the header explicitly.
+This collection takes **[Inheriting auth](https://learning.getpostman.com/docs/postman/sending-api-requests/authorization/#inheriting-auth)** to apply token to every endpoint in the collection automatically, which means it does not need to input the token in the header explicitly.
 
 Some Forge API endpoints support 3-legged token only, some may support both 2-legged token and 3-legged token.
 
