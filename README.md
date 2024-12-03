@@ -1,4 +1,4 @@
-# Postman Collection for BIM360 Document Management (Docs) API 
+# Postman Collection for BIM360 or ACC Document Management API 
 
 [![Postman](https://img.shields.io/badge/Postman-v7-orange.svg)](https://www.getpostman.com/)
 
@@ -7,12 +7,14 @@
 
 ## Description
 
-This repository provides demos for the category of [BIM360 Document Management (Docs) API](https://forge.autodesk.com/en/docs/bim360/v1/reference/http/document-management-projects-project_id-versions-version_id-exports-POST/) . Right now, the APIs demos are:
+This repository provides demos for the category of [BIM360 or ACC Document Management (Docs) API](https://forge.autodesk.com/en/docs/bim360/v1/reference/http/document-management-projects-project_id-versions-version_id-exports-POST/). These APIs are compatible with ACC and BIM360. Right now, the APIs demos are:
  - Custom Attributes
  - Folder Permissions
  - Download PDF
  
-The collection will be kept updated with new APIs. As to Get Documents/Items/Versions/Objects, they belong to Data Management APIs. This collection does not include them.
+As to Get Documents/Items/Versions/Objects, they belong to Data Management APIs. This collection does not include them.
+
+These APIs support both application context authentication (2-legged token) and user context authentication (3-legged token)
 
 ## What's Postman?
 
@@ -25,13 +27,13 @@ Postman is a popular tool that provides an easy-to-use interface to send HTTP re
 
 ## Setup
 
-1.  **Forge Account**: Learn how to create a Forge Account, activate the subscription and create an app by [this tutorial](http://learnforge.autodesk.io/#/account/). Get Forge _client id_, _client secret_ and  _callback url_. Please register Forge app with the _callback url_ as 
+1.  **APS Account**: Learn how to create a APS Account, activate the subscription and create an app by [this tutorial](https://get-started.aps.autodesk.com/). Get APS _client id_, _client secret_ and  _callback url_. Please register APS app with the _callback url_ as below. This is for the workflow of user context authentication (3-legged token)
 
     ```https://www.getpostman.com/oauth2/callback```
 
-2. **BIM 360 Account and project**: must be Account Admin to add the app integration. [Learn about provisioning](https://forge.autodesk.com/blog/bim-360-docs-provisioning-forge-apps). Make a note with the __account name__
+2. **Provision your APS app to BIM 360 or ACC Account**: must be Account Admin to add the app integration. [Learn about provisioning](https://get-started.aps.autodesk.com/#provision-access-in-other-products). Make a note with the __account name__
 
-3. Ensure **Project Management** module has been activated in BIM 360 project. Make a note with the __project name__ .
+3. Ensure test project exists. Make a note with the __project name__ .
 
 4.  Clone this repository or download it. It's recommended to install [GitHub Desktop](https://desktop.github.com/). To clone it via command line, use the following (**Terminal** on MacOSX/Linux, **Git Shell** on Windows):
 
@@ -45,35 +47,24 @@ Postman is a popular tool that provides an easy-to-use interface to send HTTP re
 
 ## Generate Token
 
-This collection takes **[Inheriting auth](https://learning.getpostman.com/docs/postman/sending-api-requests/authorization/#inheriting-auth)** to apply token to every endpoint in the collection automatically, which means it does not need to input the token in the header explicitly.
-
-Some Forge API endpoints support 3-legged token only, some may support both 2-legged token and 3-legged token.
-
+This collection takes **[Inheriting auth](https://learning.getpostman.com/docs/postman/sending-api-requests/authorization/#inheriting-auth)** to apply token to every endpoint in the collection automatically, which means it does not need to input the token in the header explicitly. 
 
 ### 2-legged token scenario
- In context menu of collection >> **Edit**, switch to the tab **Authorization**. switch type to **Bearer Token**. Input the token name as **access_token**
-
-   <p align="center"><img src="./help/apiref-bearer.png" width="800" ></p> 
- In such scenario, before running other scripts, firstly run the script __GET 2Legged Token -Optional - when you need to test with 2LO__
+   Run the script **GET 2Legged Token**. It will return the access token for working with other API calls. 
 
 ### 3-legged token scenario
-   In context menu of collection >> **Edit**, switch to the tab **Authorization**. switch type to **OAuth 2.0**:
-   <p align="center"><img src="./help/apiref-oauth2.png" width="800" ></p> 
-
-   input the variables in __Configure New Token__.  **Get New Access Token**, and **Update**
+   In context menu of collection >> **Edit**, switch to the tab **Authorization**. switch type to **OAuth 2.0**. Input the variables in __Configure New Token__.  **Get New Access Token**, and **Update**
 
    - Grant Type ``Authorization Code``
    - Callback URL  ``https://www.getpostman.com/oauth2/callback``
-   - Auth URL  ``https://developer.api.autodesk.com/authentication/v1/authorize``
-   - Access Token URL  ``https://developer.api.autodesk.com/authentication/v1/gettoken``
+   - Auth URL  ``https://developer.api.autodesk.com/authentication/v2/authorize``
+   - Access Token URL  ``https://developer.api.autodesk.com/authentication/v2/token``
    - Client ID ``{{client_id}}``
    - Client Secret ``{{client_secret}}``
    - Scope ``data:read``
-   - Client Authentication ``Send Client credentials body``
+   - Client Authentication ``Send as Basic Auth header``
 
-   Click **Request Token**, it will direct to login Autodesk account, after it succeeds, the token will be generated. Click **Use Token**. Then, click **Update** to close the window of **Edit**
-
-   <p align="center"><img src="./help/token.png" width="600" ></p> 
+   Click **Request Token**, it will direct to login Autodesk account, after it succeeds, the token will be generated. Click **Use Token**.  
 
 ## API Test
 
@@ -93,4 +84,4 @@ This sample is licensed under the terms of the [MIT License](http://opensource.o
 
 ## Written by
 
-Xiaodong Liang [@coldwood](https://twitter.com/coldwood), [Forge Partner Development](http://forge.autodesk.com)
+Xiaodong Liang [@coldwood](https://twitter.com/coldwood), [Developer Advacacy and Support](http://aps.autodesk.com)

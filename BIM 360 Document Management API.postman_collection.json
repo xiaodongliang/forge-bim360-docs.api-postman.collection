@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "5184a614-1b66-454d-9b9f-9d1947a821e3",
-		"name": "BIM 360 Document Management API",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"_postman_id": "d60e75a9-3394-444f-9f10-a8d0e352c09a",
+		"name": "BIM 360 Document Management API Copy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1440859"
 	},
 	"item": [
 		{
@@ -14,7 +15,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "18dd9ba0-f444-48dc-9b82-fe183f458dc9",
 								"exec": [
 									"pm.test(\"Get hub collection, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -67,7 +67,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "af4c1efe-634a-4e32-9f97-d757008fca4e",
 								"exec": [
 									"pm.test(\"Get project collection, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -123,7 +122,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "2b74bd73-6608-4470-8491-2d994840e5b2",
 								"exec": [
 									"pm.test(\"Get project top folder, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -184,7 +182,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "4088962b-c853-4479-8bae-1dda637b2d60",
 								"exec": [
 									"pm.test(\"Get folder content of [Project Files], Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -262,7 +259,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "6a756813-6160-49ab-a031-a0ccaacb1755",
 								"exec": [
 									"pm.test(\"Get custom attributes values of some files, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -336,7 +332,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "40df4918-b5af-466e-982e-2d6e55004a93",
 								"exec": [
 									"pm.test(\"Get custom attributes definitions, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -414,7 +409,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "90845fb5-0e23-4dcb-877b-f66e0290603c",
 								"exec": [
 									"var d = new Date()",
 									"var current_time = d.getFullYear() ",
@@ -430,7 +424,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "1c6654f7-1d37-4f8b-bddc-2221d89a1efe",
 								"exec": [
 									"pm.test(\"Update custom values for one file, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -449,8 +442,8 @@
 							},
 							{
 								"key": "x-user-id",
-								"type": "text",
 								"value": "BVE5MB3YCEMF",
+								"type": "text",
 								"disabled": true
 							}
 						],
@@ -483,7 +476,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "f00cd2a6-77ac-4664-9c35-f78bf797f5d5",
 								"exec": [
 									"const radom_string = Math.random().toString().substr(2, 8); ",
 									"pm.environment.set(\"radom_string\", radom_string);",
@@ -495,7 +487,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "ace5ae5f-0426-452c-ba1a-9eede3eb8446",
 								"exec": [
 									"pm.test(\"Create custom def - text, Status code is 200\", function () {",
 									"    pm.response.to.have.status(201);",
@@ -529,8 +520,8 @@
 							},
 							{
 								"key": "x-user-id",
-								"type": "text",
 								"value": "BVE5MB3YCEMF",
+								"type": "text",
 								"disabled": true
 							}
 						],
@@ -563,7 +554,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "7936eb86-0c3e-4d3a-9ba2-9857975b2d37",
 								"exec": [
 									"const radom_string = Math.random().toString().substr(2, 8); ",
 									"pm.environment.set(\"radom_string\", radom_string);",
@@ -575,7 +565,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "61b1fc87-457e-4190-822e-586bcacc1678",
 								"exec": [
 									"pm.test(\"Create custom def - array, Status code is 200\", function () {",
 									"    pm.response.to.have.status(201);",
@@ -611,8 +600,8 @@
 							},
 							{
 								"key": "x-user-id",
-								"type": "text",
 								"value": "BVE5MB3YCEMF",
+								"type": "text",
 								"disabled": true
 							}
 						],
@@ -645,7 +634,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "084cb4f6-47d1-4b39-8e62-5d0f563950e3",
 								"exec": [
 									"const radom_string = Math.random().toString().substr(2, 8); ",
 									"pm.environment.set(\"radom_string\", radom_string);",
@@ -657,7 +645,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "93df1feb-65f3-487e-a0c8-0b0b8c065cf9",
 								"exec": [
 									"pm.test(\"Create custom def - date, Status code is 200\", function () {",
 									"    pm.response.to.have.status(201);",
@@ -691,8 +678,8 @@
 							},
 							{
 								"key": "x-user-id",
-								"type": "text",
 								"value": "BVE5MB3YCEMF",
+								"type": "text",
 								"disabled": true
 							}
 						],
@@ -725,7 +712,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "5afa17fa-b6d8-4c3d-98b8-d2fb112c6d78",
 								"exec": [
 									"pm.test(\"Get custom attributes definitions, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -802,7 +788,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "6060052b-3c0c-43df-97c9-959af616afe7",
 								"exec": [
 									"var d = new Date()",
 									"var current_time = d.getFullYear() ",
@@ -818,7 +803,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "2b273612-cef4-498f-8361-6c0dfe4d7390",
 								"exec": [
 									"pm.test(\"Update custom values for one file, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -837,8 +821,8 @@
 							},
 							{
 								"key": "x-user-id",
-								"type": "text",
 								"value": "BVE5MB3YCEMF",
+								"type": "text",
 								"disabled": true
 							}
 						],
@@ -871,7 +855,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "c37007eb-26bb-4b65-a1b7-cce620d9e9d9",
 								"exec": [
 									"var d = new Date()",
 									"var current_time = d.getFullYear() ",
@@ -890,7 +873,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "a1664e69-c34a-4790-ab60-b32ed57d4336",
 								"exec": [
 									"pm.test(\"Clear some custom values, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -909,8 +891,8 @@
 							},
 							{
 								"key": "x-user-id",
-								"type": "text",
 								"value": "BVE5MB3YCEMF",
+								"type": "text",
 								"disabled": true
 							}
 						],
@@ -943,7 +925,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "1a56edf5-c032-47d1-a805-cc2843ce3491",
 								"exec": [
 									"pm.test(\"Get custom attributes definitions, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -962,8 +943,8 @@
 							},
 							{
 								"key": "x-user-id",
-								"type": "text",
 								"value": "BVE5MB3YCEMF",
+								"type": "text",
 								"disabled": true
 							}
 						],
@@ -989,8 +970,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Download PDF",
@@ -1025,8 +1005,7 @@
 									"});",
 									"",
 									"     "
-								],
-								"id": "6235138c-b92e-4abb-aff7-3b1f8bcd04b8"
+								]
 							}
 						}
 					],
@@ -1054,7 +1033,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "39b27322-ae51-418f-8ac5-5d955e04c9f7",
 								"exec": [
 									"pm.test(\"Get project collection, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -1110,7 +1088,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "3f8d78da-a2f0-4268-afe0-31da591300cf",
 								"exec": [
 									"pm.test(\"Get project top folder, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -1171,7 +1148,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "0831dd26-22a6-43b6-b6ae-3eee4a76728f",
 								"exec": [
 									"pm.test(\"Get folder content of [Project Files], Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -1242,7 +1218,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "52d1b17b-42d7-480b-837c-1c5f29c9cb04",
 								"exec": [
 									"pm.test(\"Start Download-include markup and includeHyperlinks, Status code is 200\", function () {",
 									"",
@@ -1300,7 +1275,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "b7f48fc6-5885-4893-b399-4eb24f61a578",
 								"exec": [
 									"pm.test(\"Get Download Status, Status code is 200\", function () {",
 									"",
@@ -1365,8 +1339,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Folder Permission",
@@ -1401,8 +1374,7 @@
 									"});",
 									"",
 									"     "
-								],
-								"id": "290cb3f8-9b58-4e78-b228-8f27e6b4650b"
+								]
 							}
 						}
 					],
@@ -1430,7 +1402,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "d6c1f7e4-469f-4426-b28e-783dbfdbfd95",
 								"exec": [
 									"pm.test(\"Get project collection, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -1486,7 +1457,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "a63c4d5e-b1dc-4ef5-bd5c-4e8c08251bfd",
 								"exec": [
 									"pm.test(\"Get project top folder and find one folder, Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -1547,7 +1517,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "cf6f51b5-3ed6-4cd8-b9e1-64fd580de498",
 								"exec": [
 									"pm.test(\"List project users - Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -1607,7 +1576,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "908d2907-0806-43fd-bdf2-df625e49edb9",
 								"exec": [
 									"pm.test(\"Get project user - Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -1638,7 +1606,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "8aeffe29-d1bc-40c8-a574-bb6d87d0ac72",
 								"exec": [
 									""
 								],
@@ -1660,8 +1627,8 @@
 							},
 							{
 								"key": "User-Id",
-								"type": "text",
 								"value": "200902260532621",
+								"type": "text",
 								"disabled": true
 							}
 						],
@@ -1688,7 +1655,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "c7bbec55-0bc6-4f29-951c-28b2cdd08fcf",
 								"exec": [
 									"pm.test(\"permissions:batch-create - Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -1739,7 +1705,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "bce98821-cc2b-4036-8540-899175c3a71c",
 								"exec": [
 									"pm.test(\"permissions:batch-update - Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -1796,7 +1761,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "df132292-2a41-4108-98f4-bcc9375b80d6",
 								"exec": [
 									"pm.test(\"permissions:batch-delete - Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -1846,52 +1810,58 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
-			"name": "GET 2Legged Token -Optional - when you need to test with 2LO",
+			"name": "GET 2Legged Token",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"type": "text/javascript",
 						"exec": [
-							"tests [\"Status code is 200\"] =responseCode.code === 200 ;",
-							"tests [\"Content-Type is present\"] =responseHeaders.hasOwnProperty (\"Content-Type\") ;",
-							"tests [\"Content-Type is json\"] =postman.getResponseHeader (\"Content-Type\").indexOf (\"application/json\") !== -1 ;",
-							"",
-							"var data =JSON.parse (responseBody) ;",
-							"tests [\"Bearer ok\"] =data.access_token !== '' ;",
-							"",
-							"postman.setEnvironmentVariable (\"access_token\", data.access_token) ;",
-							""
+							"var data = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"access_token\", data.access_token);",
+							"postman.setEnvironmentVariable(\"expires_in\", data.expires_in);",
+							"postman.setEnvironmentVariable(\"token_type\", data.token_type);"
 						],
-						"id": "283d92b3-5cae-4ca2-b199-9d41bf2eee62"
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var keys = pm.environment.get(\"client_id\") + \":\" + pm.environment.get(\"client_secret\");",
+							"console.log(keys);",
+							"let encodedKeys = btoa(keys); ",
+							"console.log(encodedKeys)",
+							"pm.environment.set(\"encodedKeys\",encodedKeys);"
+						],
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic {{encodedKeys}}",
+						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "urlencoded",
 					"urlencoded": [
-						{
-							"key": "client_id",
-							"value": "{{client_id}}",
-							"type": "text"
-						},
-						{
-							"key": "client_secret",
-							"value": "{{client_secret}}",
-							"type": "text"
-						},
 						{
 							"key": "grant_type",
 							"value": "client_credentials",
@@ -1905,14 +1875,14 @@
 					]
 				},
 				"url": {
-					"raw": "{{base_domain}}/authentication/v1/authenticate",
+					"raw": "{{base_domain}}/authentication/v2/token",
 					"host": [
 						"{{base_domain}}"
 					],
 					"path": [
 						"authentication",
-						"v1",
-						"authenticate"
+						"v2",
+						"token"
 					]
 				},
 				"description": "https://developer.autodesk.com/api/view-and-data-api/#create-an-oauth2-token\n"
@@ -1923,6 +1893,21 @@
 	"auth": {
 		"type": "oauth2",
 		"oauth2": [
+			{
+				"key": "accessTokenUrl",
+				"value": "https://developer.api.autodesk.com/authentication/v2/token",
+				"type": "string"
+			},
+			{
+				"key": "authUrl",
+				"value": "https://developer.api.autodesk.com/authentication/v2/authorize",
+				"type": "string"
+			},
+			{
+				"key": "client_authentication",
+				"value": "header",
+				"type": "string"
+			},
 			{
 				"key": "scope",
 				"value": "data:read data:write",
@@ -1959,23 +1944,8 @@
 				"type": "string"
 			},
 			{
-				"key": "authUrl",
-				"value": "https://developer.api.autodesk.com/authentication/v1/authorize",
-				"type": "string"
-			},
-			{
 				"key": "addTokenTo",
 				"value": "header",
-				"type": "string"
-			},
-			{
-				"key": "client_authentication",
-				"value": "body",
-				"type": "string"
-			},
-			{
-				"key": "accessTokenUrl",
-				"value": "https://developer.api.autodesk.com/authentication/v1/gettoken",
 				"type": "string"
 			},
 			{
@@ -1989,7 +1959,6 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "bea452b7-4801-42c3-8586-c9fece1aef06",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -1999,13 +1968,11 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "6306c768-1682-4a59-a147-434e657b689e",
 				"type": "text/javascript",
 				"exec": [
 					""
 				]
 			}
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
